@@ -1,5 +1,6 @@
 package ao.space;
 
+import io.smallrye.common.annotation.RunOnVirtualThread;
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
@@ -28,8 +29,16 @@ public class LoadGreetingResource {
     }
 
     @GET
+    @Path("virtual")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String virtualGreeting() {
+        return greeting.imperative();
+    }
+
+    @GET
     @Path("reactive")
     @Produces(MediaType.TEXT_PLAIN)
+    @RunOnVirtualThread
     public Uni<String> reactiveGreeting() {
         return Uni.createFrom().item(greeting.reactive());
     }
